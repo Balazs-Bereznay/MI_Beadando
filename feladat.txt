@@ -1,0 +1,2 @@
+W15. Stack Overflow problématérkép
+Az alkalmazás a Stack Exchange API vagy nyílt adatdump segítségével elemzi a programozói kérdéseket, címkéket és válaszokat. A weboldal automatikusan témákba rendezi a kérdéseket, és megmutatja, mely technológiáknál nő leggyorsabban a problémák száma.

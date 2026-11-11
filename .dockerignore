@@ -1,0 +1,11 @@
+.git
+.env
+.env.*
+secrets
+.venv
+**/node_modules
+**/.next
+**/__pycache__
+**/*.db
+.local
+kepek

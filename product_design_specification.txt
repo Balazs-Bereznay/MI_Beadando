@@ -1,0 +1,968 @@
+# Developer Trends & Problem Analytics Platform
+**Product Design & Functional Requirements Specification**
+
+**Version:** 1.0  
+**Date:** November 8, 2026  
+**Status:** Initial product specification  
+**Audience:** Software engineers, product designers, and project stakeholders
+
+---
+
+## 1. Product Overview
+
+### 1.1 Purpose
+
+The application will provide a continuously updated view of the problems developers encounter, based on publicly available programming-related content from the Stack Exchange network.
+
+Rather than requiring users to manually inspect individual questions or search through thousands of tags, the website will automatically organize questions into meaningful topics and measure how frequently new questions are appearing within each topic.
+
+The central objective is to answer:
+
+**"What technical subjects are generating the fastest-growing number of developer questions right now?"**
+
+The website will make this information available through an interactive dashboard, topic exploration interface, historical trend visualizations, and links to the underlying questions and answers.
+
+### 1.2 Product Vision
+
+Create an accessible, data-driven platform where developers, engineering managers, researchers, and technology observers can discover emerging areas of technical difficulty and understand how developer interests and challenges evolve over time.
+
+The platform should prioritize clarity, transparency, exploration, and the ability to substantiate every displayed trend with real community questions.
+
+### 1.3 Primary Objectives
+
+1. Collect relevant publicly available questions, answers, and associated tags from the Stack Exchange network.
+2. Automatically organize questions into understandable technical topics.
+3. Identify topics experiencing the fastest growth in new question volume.
+4. Display regularly updated statistics and historical trends.
+5. Allow users to inspect the questions and answers supporting each topic.
+6. Provide interactive filtering, searching, and exploration.
+7. Communicate data freshness, coverage, and statistical limitations clearly.
+
+### 1.4 Non-Goals
+
+The initial product is not intended to:
+
+- Replace Stack Overflow or other Stack Exchange communities.
+- Provide a question-and-answer submission platform.
+- Automatically generate solutions to programming questions.
+- Evaluate individual developers' skills or competence.
+- Predict future technology adoption or market performance.
+- Claim that question volume directly measures software quality or technology popularity.
+
+---
+
+## 2. Intended Users
+
+### 2.1 Software Developers
+
+Developers interested in discovering common problems, emerging challenges, and recently discussed technologies.
+
+**Primary needs:** Find trending topics, inspect real questions, discover recurring issues, and access community answers.
+
+### 2.2 Engineering Managers and Technical Leads
+
+Professionals interested in understanding areas where teams or the wider development community may be experiencing new challenges.
+
+**Primary needs:** Compare topic growth, inspect problem patterns, and understand whether difficulties are becoming more common.
+
+### 2.3 Technology Researchers and Analysts
+
+Users studying development ecosystems, emerging technologies, community activity, and changes in technical problem areas.
+
+**Primary needs:** Explore historical trends, compare time periods, examine underlying evidence, and understand the methodology behind statistics.
+
+### 2.4 Casual Technology Observers
+
+Users who want a quick overview without needing detailed knowledge of the data source.
+
+**Primary needs:** Immediately understand which topics are growing and why they appear in the rankings.
+
+---
+
+## 3. Product Scope and Content Sources
+
+### 3.1 Primary Source
+
+The initial release will focus on **Stack Overflow**, the programming-focused question-and-answer community within the Stack Exchange network.
+
+The product design should permit future inclusion of other relevant Stack Exchange communities, provided that users can clearly identify which sources contribute to the displayed results.
+
+Examples of potential future sources include Software Engineering, Code Review, Database Administrators, and DevOps.
+
+### 3.2 Supported Content
+
+The application will examine three principal forms of content:
+
+**Questions:** The primary representation of a developer encountering a problem or requesting technical guidance.
+
+**Answers:** Responses to questions, providing additional context about the problem, proposed solutions, and community engagement.
+
+**Tags:** Community-assigned labels identifying programming languages, libraries, frameworks, tools, and other relevant technical concepts.
+
+### 3.3 Content Relationships
+
+A question may contain multiple tags, multiple answers, and associations with multiple broader topics.
+
+These relationships must be preserved in the product experience.
+
+Questions remain the primary unit used for measuring growth in developer problems. Answers and tags enrich the topic discovery and exploration experience but do not independently increase the question count.
+
+### 3.4 Source Attribution
+
+Users must be able to identify the original Stack Exchange community and access the source question.
+
+Where original content is displayed, the interface must preserve appropriate author attribution and comply with applicable content licenses and source usage requirements.
+
+---
+
+## 4. Core Product Concepts
+
+### 4.1 Question
+
+A publicly accessible programming-related question from a supported source.
+
+The application should recognize and, where available, display:
+
+- Question title and content.
+- Original publication date.
+- Original source and question link.
+- Source tags.
+- Number of answers.
+- Answer and acceptance status.
+- Question score and other available engagement indicators.
+- Relevant answers and their source attribution.
+
+### 4.2 Topic
+
+A human-readable subject representing a meaningful group of related developer questions.
+
+Examples might include:
+
+- React State Management
+- Python Dependency Problems
+- Database Connection Issues
+- Container Deployment
+- Authentication and Authorization
+- TypeScript Type Errors
+
+These are illustrative examples, not a fixed topic catalog.
+
+Topics should be derived and maintained automatically as the available content evolves.
+
+### 4.3 Tag
+
+A source-provided label attached to a question.
+
+Tags and topics serve different purposes.
+
+A tag is part of the original source content. A topic is a broader organizational concept defined by the application.
+
+For example, questions bearing the tags `python`, `pip`, `poetry`, and `dependencies` could appear within the broader topic **Python Dependency Management**, when their content supports that association.
+
+### 4.4 Topic Trend
+
+A measure of how the number of newly published questions associated with a topic changes between comparable periods.
+
+### 4.5 Emerging Topic
+
+A topic that has recently appeared or has become active after a period with no recorded questions.
+
+Emerging topics should be distinguishable from established topics experiencing measurable growth.
+
+---
+
+## 5. Functional Requirements
+
+### 5.1 Content Acquisition and Availability
+
+| ID | Requirement |
+|---|---|
+| FR-01 | The application shall obtain publicly accessible questions, answers, and tags from the supported Stack Exchange communities. |
+| FR-02 | The application shall incorporate newly available source content automatically. |
+| FR-03 | The application shall reflect relevant changes to previously observed questions, such as updated answers, edits, or source status changes. |
+| FR-04 | Each question shall retain a reference to its original source. |
+| FR-05 | The interface shall display the most recent successful data update time. |
+| FR-06 | The application shall distinguish complete, partial, outdated, and unavailable data. |
+| FR-07 | The application shall respect the source provider's usage, attribution, and access requirements. |
+
+The interface must not imply that data is fully current or comprehensive when it is not.
+
+### 5.2 Automatic Topic Organization
+
+| ID | Requirement |
+|---|---|
+| FR-08 | The application shall automatically organize relevant questions into human-readable topics. |
+| FR-09 | Topic organization shall consider question content, original tags, and available answer context. |
+| FR-10 | Questions addressing closely related technical problems should appear in consistent topic groupings. |
+| FR-11 | Every displayed topic shall have a meaningful name and short description. |
+| FR-12 | A question may be associated with multiple relevant topics. |
+| FR-13 | The application shall preserve original source tags independently of topic assignments. |
+| FR-14 | Topics may be created, renamed, reorganized, or retired as the available content changes. |
+| FR-15 | Users shall be able to examine the questions associated with each topic. |
+
+Automatic organization must remain the default experience and must not depend on users manually creating categories.
+
+A question with no sufficiently meaningful topic association may appear in a clearly identified **Other / Unclassified** category until it can be organized appropriately.
+
+Changes in topic names or organization should not silently create misleading historical growth or decline.
+
+### 5.3 Trend Analysis
+
+| ID | Requirement |
+|---|---|
+| FR-16 | The application shall measure the number of newly created questions associated with each topic over time. |
+| FR-17 | The application shall compare question volumes across equivalent time periods. |
+| FR-18 | The application shall identify and rank topics experiencing growth. |
+| FR-19 | The application shall display both absolute and percentage changes in question volume. |
+| FR-20 | Users shall be able to change the analysis period. |
+| FR-21 | Users shall be able to compare current and historical activity. |
+| FR-22 | Newly emerging topics shall be clearly distinguished from established growing topics. |
+| FR-23 | Trend statistics shall update as new source data becomes available. |
+| FR-24 | Insufficient historical data shall be identified rather than represented as a trustworthy growth statistic. |
+
+### 5.4 Exploration and Navigation
+
+| ID | Requirement |
+|---|---|
+| FR-25 | Users shall be able to browse all available topics. |
+| FR-26 | Users shall be able to search for topics using natural language and relevant technical terms. |
+| FR-27 | Users shall be able to sort topics by growth, question volume, and recent activity. |
+| FR-28 | Users shall be able to filter topics by date range, source, and relevant technical category. |
+| FR-29 | Selecting a topic shall open a dedicated topic-detail view. |
+| FR-30 | Users shall be able to browse the individual questions associated with a topic. |
+| FR-31 | Users shall be able to open the original Stack Exchange question. |
+| FR-32 | Applicable selections and filters shall remain consistent during navigation and be clear to the user. |
+
+---
+
+## 6. Topic Organization Requirements
+
+### 6.1 Organizational Goals
+
+The topic system should make the original collection of questions easier to understand than the source tags alone.
+
+Topics should describe recognizable technical subjects or problem areas rather than arbitrary collections of unrelated questions.
+
+A useful topic must be:
+
+- **Descriptive:** Its name communicates its subject.
+- **Coherent:** Its questions share a recognizable technical relationship.
+- **Discoverable:** Users can find it through search and navigation.
+- **Explainable:** Users can inspect representative questions and associated source tags.
+- **Maintainable:** Its identity and history remain understandable as terminology changes.
+
+### 6.2 Topic Detail Requirements
+
+Each topic shall expose:
+
+1. Topic name.
+2. Brief description.
+3. Related source tags.
+4. Total observed question volume.
+5. New question volume for the selected period.
+6. Growth compared with the previous period.
+7. Historical question-volume trend.
+8. Recent and representative questions.
+9. Available answer-status information.
+10. Related topics.
+
+### 6.3 Multiple Topic Associations
+
+A question may contribute to multiple topic views when relevant.
+
+Within any individual topic, a question must be counted only once for a given period.
+
+The interface must communicate that topic totals can overlap. Consequently, adding question counts from different topics may produce a number larger than the total number of unique questions.
+
+### 6.4 Topic Evolution
+
+Topics should evolve when new technical subjects become relevant.
+
+For example, a broad topic may eventually develop distinguishable subtopics as question volume and content diversity increase.
+
+When changes to topic definitions affect historical statistics, the resulting comparisons must remain understandable and consistent. The interface should avoid presenting classification changes as though they were genuine changes in developer activity.
+
+---
+
+## 7. Growth Statistics and Trend Definitions
+
+This section establishes the **product meaning** of the displayed statistics. It does not prescribe how the measurements are implemented.
+
+### 7.1 Primary Measurement
+
+The primary measurement is the number of newly created questions associated with a topic during a selected period.
+
+For the purposes of the dashboard:
+
+**One new question represents one observed problem-related inquiry, not necessarily one unique underlying technical defect.**
+
+Multiple developers may post similar questions. A single question may contain multiple difficulties.
+
+The statistic therefore measures *question activity* rather than the objectively verified number of distinct software defects.
+
+### 7.2 Time Periods
+
+Users should be able to select from these initial comparison periods:
+
+| Selection | Current period | Comparison period |
+|---|---|---|
+| Last 24 hours | Most recent 24 hours | Immediately preceding 24 hours |
+| Last 7 days | Most recent 7 days | Immediately preceding 7 days |
+| Last 30 days | Most recent 30 days | Immediately preceding 30 days |
+
+The default dashboard period shall be **Last 7 days**.
+
+Comparison periods shall have equivalent durations.
+
+All displayed periods shall use a consistent time reference and clearly describe their boundaries.
+
+### 7.3 Growth Measurements
+
+The product shall present two complementary measurements.
+
+**Absolute Growth**
+
+The difference between the number of questions in the current period and the number in the preceding period.
+
+**Relative Growth**
+
+The percentage change from the preceding period to the current period, when a meaningful preceding baseline exists.
+
+Example:
+
+A topic received 40 new questions in the previous week and 60 in the current week.
+
+| Statistic | Value |
+|---|---:|
+| Previous period | 40 questions |
+| Current period | 60 questions |
+| Absolute growth | +20 questions |
+| Relative growth | +50% |
+
+Both measurements are important.
+
+Absolute growth identifies where the largest additional volume of questions is appearing.
+
+Relative growth helps users recognize smaller topics undergoing unusually rapid change.
+
+### 7.4 Ranking Requirements
+
+The main dashboard shall rank growing topics by **absolute increase in newly created questions** by default.
+
+Users shall also be able to rank by relative percentage growth.
+
+The selected ranking method must always be visible.
+
+Topics with no observed questions in the comparison period shall not display an infinite percentage increase. They should instead receive a descriptive designation such as **Newly active**.
+
+Low-volume topics should remain discoverable, but the interface must provide sufficient context to distinguish a large percentage increase based on very few questions from substantial growth in a well-established topic.
+
+### 7.5 Historical Trends
+
+The topic-detail page shall include a time-series visualization displaying question activity across the selected historical period.
+
+Users should be able to identify:
+
+- Sustained growth.
+- Recent spikes in activity.
+- Declining question volume.
+- Periods of low activity.
+- Newly emerging subjects.
+
+The visualization shall distinguish observed data from periods for which data is missing or incomplete.
+
+### 7.6 Question and Answer Status
+
+The product shall differentiate between:
+
+- Questions with no answers.
+- Questions with one or more answers.
+- Questions with an accepted answer.
+- Questions considered answered according to the source community's status.
+
+These conditions are not interchangeable.
+
+Topic-level answer statistics may be provided as secondary indicators, but they must not alter the meaning of the primary growth measurement.
+
+---
+
+## 8. Information Architecture
+
+The public website will have four principal sections.
+
+### 8.1 Dashboard
+
+The main overview of current developer question trends.
+
+### 8.2 Explore Topics
+
+A searchable, filterable catalog of all discovered topics.
+
+### 8.3 Topic Details
+
+A detailed analytical view for an individual topic, including its historical development and supporting questions.
+
+### 8.4 About & Methodology
+
+An explanation of the source data, topic definitions, statistical measurements, limitations, attribution, and update status.
+
+### 8.5 Global Navigation
+
+The main navigation should include:
+
+**Dashboard | Explore Topics | About & Methodology**
+
+A prominent search entry point should be available throughout the website.
+
+A consistent indication of the currently selected data source and the latest update time should also be visible.
+
+---
+
+## 9. Dashboard Design
+
+### 9.1 Purpose
+
+The dashboard shall answer the platform's primary question without requiring the user to navigate elsewhere.
+
+Within a few seconds, users should understand:
+
+- Which subjects are growing fastest.
+- How quickly question activity is increasing.
+- How substantial those changes are.
+- Which period and source the statistics represent.
+- When the information was last updated.
+
+### 9.2 Page Structure
+
+**Section A — Header**
+
+Contains the product name, navigation, search, and source information.
+
+**Section B — Dashboard Introduction**
+
+Suggested heading:
+
+*"What problems are developers facing right now?"*
+
+Supporting text:
+
+*"Explore emerging technical challenges through question trends from the programming community."*
+
+**Section C — Analysis Controls**
+
+Controls for:
+
+- Data source.
+- Time period.
+- Technical category.
+- Ranking method.
+
+The interface should show active selections clearly.
+
+**Section D — Summary Statistics**
+
+A row of compact summary cards.
+
+Recommended cards:
+
+| Card | Content |
+|---|---|
+| New Questions | Unique observed questions created during the selected period |
+| Growing Topics | Topics with a positive change in question volume |
+| Fastest-Growing Topic | Topic with the largest increase under the active ranking |
+| Newly Active Topics | Topics with activity but no observed questions in the comparison period |
+
+**Section E — Fastest-Growing Topics**
+
+The most prominent part of the dashboard.
+
+Show a ranked table or list of approximately ten topics, with an option to explore additional results.
+
+Each topic row should contain:
+
+- Rank.
+- Topic name.
+- Current question count.
+- Previous question count.
+- Absolute growth.
+- Percentage growth or newly active indicator.
+- Small historical trend visualization where useful.
+
+Selecting a row opens the topic-detail page.
+
+**Section F — Activity Over Time**
+
+A historical visualization showing changes in new question activity.
+
+Users should be able to inspect selected topics and compare their trends.
+
+**Section G — Emerging Topics**
+
+A separate discovery section highlighting newly active or recently prominent technical subjects.
+
+**Section H — Data Status**
+
+A clearly accessible description of the most recent update time, source coverage, and any known data limitations.
+
+### 9.3 Dashboard Behavior
+
+- Charts and statistics shall change consistently when a user modifies a filter.
+- Selected filters shall be visibly reflected in the dashboard.
+- Rankings shall change when the ranking method changes.
+- Trend information shall update when newer data becomes available without requiring the user to reload the entire page.
+- An explicit refresh control may also be provided.
+- Automatic updates must not unexpectedly interrupt interactions or reset selected filters.
+- The interface shall explain whether the displayed statistics are current or based on an older successful update.
+
+---
+
+## 10. Explore Topics Page
+
+### 10.1 Purpose
+
+Provide a comprehensive interface for discovering and navigating technical topics beyond the topics shown on the main dashboard.
+
+### 10.2 Page Components
+
+**Search field:** Allows users to search by technical subject, related terms, or original tags.
+
+**Filter controls:** Allow users to narrow results by source, category, time period, activity, or growth status.
+
+**Sort controls:** Allow ordering by question volume, absolute growth, percentage growth, name, or recent activity.
+
+**Topic collection:** Displays matching topics in a scannable list or card layout.
+
+### 10.3 Topic Card
+
+Each topic card should display:
+
+- Topic name.
+- Short description.
+- Current-period question volume.
+- Growth indicator.
+- Relevant tags or category.
+- Link to topic details.
+
+### 10.4 Search Behavior
+
+Search should support both exact technical terms and broader descriptive queries.
+
+For example, searches such as:
+
+- `docker`
+- `python dependencies`
+- `database connection problems`
+
+should help users discover relevant topic areas.
+
+When no results are found, the page should explain the situation and provide a way to clear or adjust the search.
+
+---
+
+## 11. Topic Detail Page
+
+### 11.1 Purpose
+
+Allow users to investigate an individual topic and understand the evidence behind its reported trend.
+
+### 11.2 Page Structure
+
+**Section A — Topic Header**
+
+Displays the topic name, short description, associated category, and relevant source tags.
+
+**Section B — Key Statistics**
+
+Recommended statistics:
+
+- New questions in the current period.
+- New questions in the previous period.
+- Absolute growth.
+- Relative growth.
+- Total observed questions.
+- Questions with no answers.
+- Questions with an accepted answer.
+
+**Section C — Historical Trend Chart**
+
+A prominent time-series visualization of new question volume.
+
+The user should be able to inspect individual points or periods and view the corresponding observed counts.
+
+**Section D — Question Explorer**
+
+A searchable or sortable list of questions belonging to the selected topic.
+
+Each entry should include:
+
+- Question title.
+- Publication date.
+- Original tags.
+- Answer count and status.
+- Available community score.
+- Original source link.
+
+Users should be able to sort questions by newest, oldest, most active, or highest-scoring, where the information is available.
+
+**Section E — Question Preview**
+
+Selecting a question may reveal additional details without immediately leaving the application.
+
+The preview should provide enough context to help users determine whether to open the original source.
+
+It may include a question excerpt and relevant answer excerpts, provided that source attribution and applicable content requirements are satisfied.
+
+Original Stack Exchange content should remain directly accessible through a clearly labeled link.
+
+**Section F — Related Topics**
+
+Display other topics that users may wish to explore.
+
+These should be meaningful relationships rather than merely unrelated popular subjects.
+
+### 11.3 Expected User Journey
+
+1. A user notices that **Python Dependency Management** appears among the fastest-growing topics.
+2. The user selects the topic.
+3. The topic-detail page displays its historical question volume and growth statistics.
+4. The user examines a recent increase in activity.
+5. The user opens the associated question list.
+6. The user inspects several titles, tags, and answer statuses.
+7. The user follows a link to an original Stack Overflow question for additional context.
+
+The website should support this journey without requiring an account.
+
+---
+
+## 12. Visual Design Principles
+
+### 12.1 General Direction
+
+The visual identity should communicate analytical clarity, technical credibility, and ease of exploration.
+
+The design should be modern and professional without becoming unnecessarily complex.
+
+### 12.2 Information Hierarchy
+
+Prioritize information in this order:
+
+1. Topic name.
+2. Growth measurement.
+3. Question volume and comparison period.
+4. Historical trend.
+5. Supporting questions and metadata.
+
+The primary statistics must be understandable without requiring users to interpret a complex chart.
+
+### 12.3 Color Usage
+
+Visual indicators should distinguish:
+
+- Increasing activity.
+- Decreasing activity.
+- Stable activity.
+- Newly active topics.
+- Missing or uncertain data.
+
+Color should not be the only means of communicating these states.
+
+Text labels, signs, values, and chart annotations must also communicate their meaning.
+
+### 12.4 Charts
+
+Charts must have:
+
+- Descriptive titles.
+- Labeled axes.
+- Appropriate date and value formatting.
+- Clear units of measurement.
+- Consistent representation across comparable views.
+- Accessible alternatives for essential statistics.
+- Explanations for missing data.
+
+Trends should not be visually exaggerated through misleading scales or incomplete context.
+
+### 12.5 Responsive Design
+
+The application must provide a usable experience on desktop, tablet, and mobile devices.
+
+On smaller displays:
+
+- Summary cards may stack vertically.
+- Dense tables should use an appropriate compact or horizontally accessible presentation.
+- Filters should remain accessible without dominating the screen.
+- Charts should adapt without losing essential information.
+- Navigation should remain discoverable.
+
+### 12.6 Accessibility
+
+The product should target WCAG 2.2 AA accessibility.
+
+Essential requirements include keyboard operation, visible focus indicators, readable contrast, accessible form labels, understandable charts, and text alternatives for important visual information.
+
+---
+
+## 13. Interactive Behavior and Application States
+
+### 13.1 Initial Loading
+
+While information is being prepared, the application shall display a loading state that preserves the general page structure.
+
+Loading indicators should make it clear which information is not yet available.
+
+### 13.2 Empty Results
+
+When filters or searches produce no matching topics, the interface shall display a meaningful explanation rather than an empty panel.
+
+Users must be able to modify or clear the active filters.
+
+### 13.3 Source Unavailable
+
+If current source information cannot be obtained, the interface shall:
+
+- Display the issue clearly.
+- Avoid representing missing information as zero activity.
+- Indicate the time of the latest reliable update.
+- Continue showing previously available information when appropriate, clearly marked as potentially outdated.
+
+### 13.4 Partial Historical Coverage
+
+A trend comparison shall not be displayed as fully reliable when either comparison period lacks sufficient source coverage.
+
+The affected chart or statistic should contain a visible limitation notice.
+
+### 13.5 No Historical Baseline
+
+For a topic without a meaningful previous-period baseline, the application shall display a newly active or insufficient-history designation instead of an undefined percentage.
+
+### 13.6 Data Updates
+
+When newer data becomes available:
+
+- Relevant statistics and charts should reflect it.
+- Existing user selections should be preserved.
+- Updates should not unexpectedly change the user's scroll position or interrupt an open question preview.
+- The latest update time should change accordingly.
+
+### 13.7 Source Changes
+
+If an original question is edited, closed, removed, or otherwise changes status, the application should reflect the latest available source state where appropriate.
+
+Unavailable original content should not be presented as though it remains accessible.
+
+---
+
+## 14. Trust, Transparency, and Data Interpretation
+
+### 14.1 Data Freshness
+
+The interface shall display the last successful update time and identify circumstances where the available content is not fully current.
+
+The term **live** should not be used unless the product can substantiate that claim. The preferred description is **regularly updated**.
+
+### 14.2 Statistical Transparency
+
+Each displayed growth statistic must have an understandable definition accessible to the user.
+
+Tooltips or explanatory text should clarify:
+
+- What counts as a question.
+- Which source communities are included.
+- Which time periods are compared.
+- How growth is expressed.
+- How topics with no historical baseline are represented.
+- Whether questions can belong to multiple topics.
+
+### 14.3 Data Coverage
+
+The application shall communicate the limits of its observed dataset.
+
+It must not claim to represent every question ever created on a source community unless that coverage has been established.
+
+If source coverage changes materially, historical comparisons must not misleadingly present that change as organic growth.
+
+### 14.4 Interpretation Limitations
+
+The website must not imply that an increase in questions necessarily proves a technology is becoming less reliable.
+
+An increase may reflect changes in adoption, community participation, learning activity, or other factors.
+
+Similarly, an accepted answer does not guarantee that a problem is universally solved.
+
+### 14.5 Source and Author Attribution
+
+Original content must be distinguishable from application-generated topic names, labels, summaries, and statistical interpretations.
+
+Displayed questions and answers must provide appropriate source and author attribution in accordance with applicable requirements.
+
+---
+
+## 15. Administrative and Content Quality Requirements
+
+The initial platform should operate automatically without requiring routine manual topic classification.
+
+However, the product should accommodate future administrative review when automatic organization produces visibly confusing outcomes.
+
+A future administrative interface may support:
+
+- Reviewing topic names and descriptions.
+- Identifying duplicated or overlapping topic concepts.
+- Correcting misleading topic organization.
+- Reviewing unclassified content.
+- Inspecting source coverage and freshness.
+- Recording meaningful topic-definition changes.
+
+Administrative changes must preserve the intelligibility of historical statistics.
+
+Public users do not require these controls in the initial release.
+
+---
+
+## 16. Acceptance Criteria
+
+The following scenarios establish testable product behavior without prescribing implementation.
+
+| ID | Scenario | Expected result |
+|---|---|---|
+| AC-01 | A new source question becomes available | It appears in the appropriate topic view after the relevant data update |
+| AC-02 | A question has multiple source tags | All applicable original tags remain identifiable |
+| AC-03 | A question matches multiple topics | It may appear in each relevant topic, but is counted once within each topic |
+| AC-04 | A topic has 40 questions in the previous period and 60 in the current period | The interface displays +20 questions and +50% growth |
+| AC-05 | A topic has no questions in the previous period and 12 in the current period | It is marked newly active rather than displaying infinite percentage growth |
+| AC-06 | A user changes from 7 days to 30 days | All relevant statistics, rankings, and visualizations reflect the selected period |
+| AC-07 | A user switches from absolute to percentage growth ranking | The displayed ranking changes and its meaning remains clear |
+| AC-08 | A user selects a topic | The corresponding topic-detail page displays statistics, charts, and supporting questions |
+| AC-09 | A user selects an original question link | The correct source question can be opened |
+| AC-10 | A user searches for an unavailable topic | A useful empty state and a way to adjust the search are displayed |
+| AC-11 | The source becomes temporarily unavailable | The application shows the issue without falsely reporting zero questions |
+| AC-12 | Historical data is incomplete | Affected comparisons are visibly qualified |
+| AC-13 | Updated source content becomes available | Relevant displayed information can refresh without forcing a full-page reload |
+| AC-14 | A topic is reorganized | Historical statistics do not silently misrepresent the reorganization as question growth |
+| AC-15 | A mobile user opens the dashboard | The primary statistics, navigation, and charts remain readable and operable |
+| AC-16 | A keyboard-only user explores topics | All essential navigation and filtering actions remain accessible |
+| AC-17 | A user inspects a displayed question or answer excerpt | Original source and required attribution are available |
+
+---
+
+## 17. Release Priorities
+
+### Phase 1 — Minimum Viable Product
+
+The initial release must deliver the principal value of the application.
+
+Required capabilities:
+
+- Stack Overflow as the initial content source.
+- Automatic question organization into topics.
+- Dashboard of fastest-growing topics.
+- Absolute and percentage growth measurements.
+- 24-hour, 7-day, and 30-day comparisons.
+- Topic exploration and search.
+- Topic-detail pages.
+- Historical question-volume charts.
+- Underlying question listings and original links.
+- Data freshness indicators.
+- Responsive and accessible interface.
+- Basic methodology and source attribution information.
+
+### Phase 2 — Enhanced Exploration
+
+Potential additions:
+
+- Support for additional programming-related Stack Exchange communities.
+- More detailed topic comparisons.
+- Additional answer-status analytics.
+- Improved topic discovery and related-topic exploration.
+- More extensive historical analysis.
+- User-selected topic comparisons.
+
+### Phase 3 — Advanced Product Features
+
+Potential additions:
+
+- Personal topic watchlists.
+- Notifications about significant changes in selected topics.
+- Shareable trend views and reports.
+- Data exports for further analysis.
+- More detailed reporting on recurring technical problem areas.
+- Administrative topic review and content-quality controls.
+
+These features are not prerequisites for the initial launch.
+
+---
+
+## 18. Measures of Product Success
+
+The application should be evaluated against both functional correctness and user experience.
+
+### 18.1 Functional Success
+
+- New content is incorporated reliably.
+- Topic organization produces understandable results.
+- Growth statistics reflect the defined comparisons.
+- Users can trace topic trends to source questions.
+- The interface communicates incomplete or outdated data appropriately.
+
+### 18.2 Usability Success
+
+- First-time users can identify the fastest-growing topic without assistance.
+- Users understand the difference between absolute and percentage growth.
+- Users can navigate from a dashboard trend to its underlying questions.
+- Users can discover relevant topics using search and filters.
+- The application remains usable across supported screen sizes.
+
+### 18.3 Trust Success
+
+- Every displayed statistic has an accessible definition.
+- Source data is appropriately attributed.
+- Users can identify when data was last updated.
+- Missing or partial coverage is not disguised as meaningful activity.
+- Topic classifications are presented as organizational interpretations, not indisputable facts.
+
+---
+
+## 19. Engineering Handoff
+
+This specification defines the intended product behavior and user experience.
+
+The engineering team is responsible for expanding it into an implementation plan, including the selection and design of:
+
+- Application architecture and components.
+- Source data acquisition and processing.
+- Data storage and historical retention.
+- Topic discovery, organization, and maintenance.
+- Trend measurement implementation.
+- Data update and synchronization mechanisms.
+- Interfaces between application components.
+- Infrastructure, deployment, and operational monitoring.
+- Automated testing and system performance.
+
+Engineering decisions should preserve the functional requirements, product definitions, and acceptance criteria established here.
+
+Any proposed implementation tradeoff affecting the accuracy, interpretation, accessibility, or freshness of user-facing statistics should be documented as a product decision.
+
+---
+
+## 20. Reference Documentation
+
+The following official resources should be consulted during implementation and compliance review:
+
+- [Stack Exchange API Documentation](https://api.stackexchange.com/docs)
+- [Stack Exchange Questions API](https://api.stackexchange.com/docs/questions)
+- [Stack Exchange Question Data Definition](https://api.stackexchange.com/docs/types/question)
+- [Stack Exchange Tags API](https://api.stackexchange.com/docs/tags)
+- [Stack Exchange API Usage Limits](https://api.stackexchange.com/docs/throttle)
+- [Stack Exchange API Terms of Use](https://stackoverflow.com/legal/api-terms-of-use)
+- [Stack Overflow Content Licensing](https://stackoverflow.com/help/licensing)
+
+These resources establish the source platform's published capabilities and requirements. They do not determine the application's internal design.
+
+---
+
+## 21. Final Product Definition
+
+The finished product shall be a publicly accessible website that automatically organizes programming-related questions into understandable technical topics and provides a regularly updated analytical view of which topics are experiencing the fastest growth in newly created questions.
+
+Users shall be able to move seamlessly from a high-level overview of emerging developer challenges to historical trends, individual topic information, and the original community questions supporting the analysis.
+
+**The defining principle of the platform is that every reported trend must be understandable, explorable, and traceable to observable source content.**

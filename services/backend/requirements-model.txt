@@ -1,0 +1,3 @@
+# Optional local semantic inference, installed only by the model Docker overlay.
+# Model files must be mounted locally; the worker never downloads models at runtime.
+sentence-transformers==5.1.2

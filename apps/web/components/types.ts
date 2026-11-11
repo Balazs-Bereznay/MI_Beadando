@@ -1,0 +1,11 @@
+export type Point={date:string;count:number|null;coverage_state:string};
+export type Meta={release_id:string;taxonomy_version:string;as_of:string;published_at:string;current_window:{start:string;end:string};previous_window:{start:string;end:string};coverage_state:string;freshness_state:string;limitations:string[];demo:boolean};
+export type Topic={id:string;slug:string;name:string;description:string;category:string;tags:string[];current_count:number;previous_count:number;absolute_growth:number|null;relative_growth_pct:number|null;growth_state:string;total_count:number;last_activity_at:string|null;small_baseline:boolean;history:Point[]};
+export type Owner={display_name?:string;link?:string};
+export type Answer={answer_id:number;body:string;score:number;is_accepted:boolean;owner:Owner;content_license:string;url:string};
+export type Question={id:string;source:string;source_question_id:number;title:string;excerpt:string;tags:string[];created_at:string;last_activity_at:string;answer_count:number;accepted_answer_id:number|null;is_answered:boolean;score:number;url:string;owner:Owner;content_license:string;status:string;answers:Answer[]};
+export type Status={available:boolean;release_id:string|null;as_of:string|null;published_at:string|null;last_success_at:string|null;coverage_start:string|null;coverage_end:string|null;freshness_state:string;source:string;source_health:string;demo:boolean;message:string;categories:string[]};
+export type Dashboard={meta:Meta;summary:{new_questions:number;growing_topics:number;fastest_growing_topic:Topic|null;newly_active_topics:number};topics:Topic[];emerging_topics:Topic[];history:Point[]};
+export type Catalog={meta:Meta;topics:Topic[];total:number;next_cursor:string|null;categories:string[]};
+export type Detail={meta:Meta;topic:Topic;answer_stats:{no_answers:number;with_answers:number;accepted:number;source_answered:number};related_topics:Topic[];taxonomy_note:string};
+export type Questions={meta:Meta;questions:Question[];total:number;next_cursor:string|null};

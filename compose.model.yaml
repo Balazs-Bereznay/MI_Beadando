@@ -1,0 +1,17 @@
+# Optional local semantic embeddings. Prepare a SentenceTransformer model
+# directory at ./models/topic-encoder before starting this override.
+services:
+  api:
+    build:
+      context: ./services/backend
+      args:
+        INSTALL_TOPIC_MODEL: 'true'
+  worker:
+    build:
+      context: ./services/backend
+      args:
+        INSTALL_TOPIC_MODEL: 'true'
+    environment:
+      TOPIC_MODEL: /models/topic-encoder
+    volumes:
+      - ./models/topic-encoder:/models/topic-encoder:ro
